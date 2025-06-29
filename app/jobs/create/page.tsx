@@ -10,16 +10,16 @@ import { Badge } from '@/components/ui/badge'
 import { 
   Brain,
   ArrowLeft,
-  Wand2,
-  Building,
-  MapPin,
-  DollarSign,
-  Users,
+  Calendar,
   Clock,
-  Zap,
+  User,
+  Users,
+  Mic,
+  Video,
   CheckCircle,
-  Copy,
-  ExternalLink
+  Plus,
+  X,
+  Bot
 } from 'lucide-react'
 import {
   Select,
@@ -31,24 +31,28 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import Link from 'next/link'
 
-export default function CreateJobPage() {
+export default function CreateInterviewPage() {
   const { user, isLoaded } = useUser()
   const router = useRouter()
   const [step, setStep] = useState(1)
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [isPosting, setIsPosting] = useState(false)
-  const [jobData, setJobData] = useState({
-    title: '',
-    company: user?.organizationMemberships?.[0]?.organization?.name || '',
-    level: '',
-    skills: [] as string[],
-    location: '',
-    type: '',
-    salaryRange: { min: 0, max: 0 },
-    description: ''
+  const [isCreating, setIsCreating] = useState(false)
+  const [interviewData, setInterviewData] = useState({
+    candidateId: '',
+    candidateName: '',
+    candidateEmail: '',
+    jobTitle: '',
+    interviewType: '',
+    scheduledDate: '',
+    scheduledTime: '',
+    duration: 60,
+    interviewerEmail: '',
+    interviewerName: '',
+    meetingPlatform: 'google-meet',
+    notes: '',
+    questions: [] as string[]
   })
-  const [generatedJob, setGeneratedJob] = useState<any>(null)
-  const [screeningLink, setScreeningLink] = useState('')
+
+  const [newQuestion, setNewQuestion] = useState('')
 
   // Check authentication and role
   useEffect(() => {
@@ -92,55 +96,74 @@ export default function CreateJobPage() {
     return null // Will be redirected by useEffect
   }
 
-  const skillOptions = [
-    'JavaScript', 'TypeScript', 'React', 'Node.js', 'Python', 'Java',
-    'AWS', 'Docker', 'Kubernetes', 'MongoDB', 'PostgreSQL', 'GraphQL',
-    'Next.js', 'Vue.js', 'Angular', 'Express.js', 'Django', 'Flask',
-    'Machine Learning', 'Data Science', 'DevOps', 'Cybersecurity'
+  // Mock candidates data
+  const candidates = [
+    {
+      id: '1',
+      name: 'Sarah Johnson',
+      email: 'sarah.johnson@email.com',
+      jobTitle: 'Senior Frontend Developer',
+      score: 92,
+      status: 'screening_completed'
+    },
+    {
+      id: '2',
+      name: 'Michael Chen',
+      email: 'michael.chen@email.com',
+      jobTitle: 'Product Manager',
+      score: 88,
+      status: 'screening_completed'
+    },
+    {
+      id: '3',
+      name: 'Emily Rodriguez',
+      email: 'emily.rodriguez@email.com',
+      jobTitle: 'Data Scientist',
+      score: 85,
+      status: 'screening_completed'
+    }
   ]
 
-  const handleSkillToggle = (skill: string) => {
-    setJobData(prev => ({
-      ...prev,
-      skills: prev.skills.includes(skill)
-        ? prev.skills.filter(s => s !== skill)
-        : [...prev.skills, skill]
-    }))
-  }
-
-  const handleGenerateJob = async () => {
-    setIsGenerating(true)
-    try {
-      const response = await fetch('/api/jobs/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(jobData)
-      })
-      
-      const result = await response.json()
-      setGeneratedJob(result.job)
-      setScreeningLink(result.job.screeningLink)
-      setStep(2)
-    } catch (error) {
-      console.error('Error generating job:', error)
-    } finally {
-      setIsGenerating(false)
+  const handleCandidateSelect = (candidateId: string) => {
+    const candidate = candidates.find(c => c.id === candidateId)
+    if (candidate) {
+      setInterviewData(prev => ({
+        ...prev,
+        candidateId,
+        candidateName: candidate.name,
+        candidateEmail: candidate.email,
+        jobTitle: candidate.jobTitle
+      }))
     }
   }
 
-  const handlePostToLinkedIn = async () => {
-    setIsPosting(true)
+  const addQuestion = () => {
+    if (newQuestion.trim()) {
+      setInterviewData(prev => ({
+        ...prev,
+        questions: [...prev.questions, newQuestion.trim()]
+      }))
+      setNewQuestion('')
+    }
+  }
+
+  const removeQuestion = (index: number) => {
+    setInterviewData(prev => ({
+      ...prev,
+      questions: prev.questions.filter((_, i) => i !== index)
+    }))
+  }
+
+  const handleCreateInterview = async () => {
+    setIsCreating(true)
     try {
-      const response = await fetch('/api/jobs/linkedin', {
+      const response = await fetch('/api/interviews/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          jobId: generatedJob.id,
-          title: generatedJob.title,
-          company: generatedJob.company,
-          description: generatedJob.description,
-          location: generatedJob.location,
-          applyUrl: screeningLink
+          ...interviewData,
+          recruiterId: user?.id,
+          createdAt: new Date()
         })
       })
       
@@ -149,14 +172,42 @@ export default function CreateJobPage() {
         setStep(3)
       }
     } catch (error) {
-      console.error('Error posting to LinkedIn:', error)
+      console.error('Error creating interview:', error)
     } finally {
-      setIsPosting(false)
+      setIsCreating(false)
     }
   }
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
+  const getDefaultQuestions = (type: string) => {
+    const questionSets = {
+      'technical': [
+        'Walk me through your approach to solving complex technical problems.',
+        'Describe a challenging project you worked on and how you overcame obstacles.',
+        'How do you stay updated with the latest technology trends?',
+        'Explain a time when you had to learn a new technology quickly.'
+      ],
+      'behavioral': [
+        'Tell me about a time when you had to work with a difficult team member.',
+        'Describe a situation where you had to meet a tight deadline.',
+        'How do you handle constructive criticism?',
+        'Give me an example of when you showed leadership.'
+      ],
+      'ai': [
+        'Our AI interviewer will conduct an adaptive conversation based on the candidate\'s responses.',
+        'The AI will assess technical skills, communication, and cultural fit automatically.',
+        'Questions will be tailored to the specific role and candidate background.',
+        'The interview will include follow-up questions based on candidate responses.'
+      ]
+    }
+    return questionSets[type as keyof typeof questionSets] || []
+  }
+
+  const handleInterviewTypeChange = (type: string) => {
+    setInterviewData(prev => ({
+      ...prev,
+      interviewType: type,
+      questions: getDefaultQuestions(type)
+    }))
   }
 
   const handleBackToDashboard = () => {
@@ -174,8 +225,8 @@ export default function CreateJobPage() {
                 Back to Dashboard
               </Button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Create New Job</h1>
-                <p className="text-gray-600">Let AI help you create the perfect job posting</p>
+                <h1 className="text-2xl font-bold text-gray-900">Schedule Interview</h1>
+                <p className="text-gray-600">Create an interview session with AI or human interviewer</p>
               </div>
             </div>
           </div>
@@ -186,163 +237,212 @@ export default function CreateJobPage() {
             <Card className="shadow-lg border-0">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <Brain className="h-6 w-6 text-blue-600" />
-                  <span>Job Details</span>
+                  <Calendar className="h-6 w-6 text-blue-600" />
+                  <span>Interview Details</span>
                 </CardTitle>
                 <CardDescription>
-                  Provide basic information and let our AI generate a compelling job description
+                  Select a candidate and configure the interview settings
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Job Title *
+                      Select Candidate *
                     </label>
-                    <Input
-                      placeholder="e.g., Senior Frontend Developer"
-                      value={jobData.title}
-                      onChange={(e) => setJobData(prev => ({ ...prev, title: e.target.value }))}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Company *
-                    </label>
-                    <Input
-                      placeholder="Company name"
-                      value={jobData.company}
-                      onChange={(e) => setJobData(prev => ({ ...prev, company: e.target.value }))}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Experience Level *
-                    </label>
-                    <Select value={jobData.level} onValueChange={(value) => setJobData(prev => ({ ...prev, level: value }))}>
+                    <Select value={interviewData.candidateId} onValueChange={handleCandidateSelect}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select level" />
+                        <SelectValue placeholder="Choose a candidate" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="entry">Entry Level</SelectItem>
-                        <SelectItem value="mid">Mid Level</SelectItem>
-                        <SelectItem value="senior">Senior Level</SelectItem>
-                        <SelectItem value="lead">Lead/Principal</SelectItem>
+                        {candidates.map((candidate) => (
+                          <SelectItem key={candidate.id} value={candidate.id}>
+                            <div className="flex items-center justify-between w-full">
+                              <div>
+                                <div className="font-medium">{candidate.name}</div>
+                                <div className="text-sm text-gray-500">{candidate.jobTitle}</div>
+                              </div>
+                              <Badge variant="outline" className="ml-2">
+                                Score: {candidate.score}
+                              </Badge>
+                            </div>
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Job Type *
+                      Interview Type *
                     </label>
-                    <Select value={jobData.type} onValueChange={(value) => setJobData(prev => ({ ...prev, type: value }))}>
+                    <Select value={interviewData.interviewType} onValueChange={handleInterviewTypeChange}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
+                        <SelectValue placeholder="Select interview type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="full-time">Full-time</SelectItem>
-                        <SelectItem value="part-time">Part-time</SelectItem>
-                        <SelectItem value="contract">Contract</SelectItem>
-                        <SelectItem value="remote">Remote</SelectItem>
+                        <SelectItem value="ai">
+                          <div className="flex items-center space-x-2">
+                            <Bot className="h-4 w-4 text-purple-600" />
+                            <div>
+                              <div className="font-medium">AI Voice Interview</div>
+                              <div className="text-xs text-gray-500">Automated AI interviewer</div>
+                            </div>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="technical">
+                          <div className="flex items-center space-x-2">
+                            <Video className="h-4 w-4 text-blue-600" />
+                            <div>
+                              <div className="font-medium">Technical Interview</div>
+                              <div className="text-xs text-gray-500">Human technical assessment</div>
+                            </div>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="behavioral">
+                          <div className="flex items-center space-x-2">
+                            <Users className="h-4 w-4 text-green-600" />
+                            <div>
+                              <div className="font-medium">Behavioral Interview</div>
+                              <div className="text-xs text-gray-500">Human behavioral assessment</div>
+                            </div>
+                          </div>
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Location *
+                      Date *
                     </label>
                     <Input
-                      placeholder="e.g., San Francisco, CA or Remote"
-                      value={jobData.location}
-                      onChange={(e) => setJobData(prev => ({ ...prev, location: e.target.value }))}
+                      type="date"
+                      value={interviewData.scheduledDate}
+                      onChange={(e) => setInterviewData(prev => ({ ...prev, scheduledDate: e.target.value }))}
+                      min={new Date().toISOString().split('T')[0]}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Salary Range (USD) *
+                      Time *
                     </label>
-                    <div className="flex space-x-2">
+                    <Input
+                      type="time"
+                      value={interviewData.scheduledTime}
+                      onChange={(e) => setInterviewData(prev => ({ ...prev, scheduledTime: e.target.value }))}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Duration (minutes) *
+                    </label>
+                    <Select 
+                      value={interviewData.duration.toString()} 
+                      onValueChange={(value) => setInterviewData(prev => ({ ...prev, duration: parseInt(value) }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="30">30 minutes</SelectItem>
+                        <SelectItem value="45">45 minutes</SelectItem>
+                        <SelectItem value="60">60 minutes</SelectItem>
+                        <SelectItem value="90">90 minutes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {interviewData.interviewType !== 'ai' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Interviewer Email *
+                      </label>
                       <Input
-                        type="number"
-                        placeholder="Min"
-                        value={jobData.salaryRange.min || ''}
-                        onChange={(e) => setJobData(prev => ({ 
-                          ...prev, 
-                          salaryRange: { ...prev.salaryRange, min: parseInt(e.target.value) || 0 }
-                        }))}
-                      />
-                      <Input
-                        type="number"
-                        placeholder="Max"
-                        value={jobData.salaryRange.max || ''}
-                        onChange={(e) => setJobData(prev => ({ 
-                          ...prev, 
-                          salaryRange: { ...prev.salaryRange, max: parseInt(e.target.value) || 0 }
-                        }))}
+                        type="email"
+                        placeholder="interviewer@company.com"
+                        value={interviewData.interviewerEmail}
+                        onChange={(e) => setInterviewData(prev => ({ ...prev, interviewerEmail: e.target.value }))}
                       />
                     </div>
-                  </div>
+                  )}
                 </div>
+
+                {interviewData.interviewType !== 'ai' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Meeting Platform
+                    </label>
+                    <Select 
+                      value={interviewData.meetingPlatform} 
+                      onValueChange={(value) => setInterviewData(prev => ({ ...prev, meetingPlatform: value }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="google-meet">Google Meet</SelectItem>
+                        <SelectItem value="zoom">Zoom</SelectItem>
+                        <SelectItem value="teams">Microsoft Teams</SelectItem>
+                        <SelectItem value="phone">Phone Call</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Required Skills *
-                  </label>
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {skillOptions.map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant={jobData.skills.includes(skill) ? "default" : "outline"}
-                        className={`cursor-pointer transition-colors ${
-                          jobData.skills.includes(skill) 
-                            ? 'bg-blue-600 hover:bg-blue-700' 
-                            : 'hover:bg-gray-100'
-                        }`}
-                        onClick={() => handleSkillToggle(skill)}
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-500">
-                    Selected: {jobData.skills.length} skills
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Custom Job Description (Optional)
+                    Additional Notes
                   </label>
                   <Textarea
-                    placeholder="Leave blank to let AI generate the description, or provide your own..."
-                    value={jobData.description}
-                    onChange={(e) => setJobData(prev => ({ ...prev, description: e.target.value }))}
-                    rows={4}
+                    placeholder="Any special instructions or notes for the interview..."
+                    value={interviewData.notes}
+                    onChange={(e) => setInterviewData(prev => ({ ...prev, notes: e.target.value }))}
+                    rows={3}
                   />
                 </div>
 
+                {/* AI Interview Highlight */}
+                {interviewData.interviewType === 'ai' && (
+                  <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <Bot className="h-8 w-8 text-purple-600" />
+                      <div>
+                        <h3 className="text-lg font-semibold text-purple-900">AI Voice Interview</h3>
+                        <p className="text-purple-700">Advanced AI interviewer will conduct the session</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="h-4 w-4 text-purple-600" />
+                        <span className="text-purple-800">Adaptive questioning based on responses</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="h-4 w-4 text-purple-600" />
+                        <span className="text-purple-800">Real-time sentiment analysis</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="h-4 w-4 text-purple-600" />
+                        <span className="text-purple-800">Automatic scoring and feedback</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="h-4 w-4 text-purple-600" />
+                        <span className="text-purple-800">Detailed interview transcript</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <Button
-                  onClick={handleGenerateJob}
-                  disabled={!jobData.title || !jobData.company || !jobData.level || jobData.skills.length === 0 || isGenerating}
+                  onClick={() => setStep(2)}
+                  disabled={!interviewData.candidateId || !interviewData.interviewType || !interviewData.scheduledDate || !interviewData.scheduledTime}
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                   size="lg"
                 >
-                  {isGenerating ? (
-                    <div className="flex items-center space-x-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      <span>Generating Job Description...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <Wand2 className="h-5 w-5" />
-                      <span>Generate Job with AI</span>
-                    </div>
-                  )}
+                  Continue to Questions
+                  <ArrowLeft className="h-5 w-5 ml-2 rotate-180" />
                 </Button>
               </CardContent>
             </Card>
@@ -361,113 +461,116 @@ export default function CreateJobPage() {
               <div className="flex items-center space-x-4">
                 <Button variant="ghost" size="sm" onClick={() => setStep(1)}>
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Edit
+                  Back to Details
                 </Button>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Review & Publish</h1>
-                  <p className="text-gray-600">Review your AI-generated job posting</p>
+                  <h1 className="text-2xl font-bold text-gray-900">Interview Questions</h1>
+                  <p className="text-gray-600">Configure questions for the interview</p>
                 </div>
               </div>
-              <div className="flex space-x-3">
-                <Button
-                  onClick={handleBackToDashboard}
-                  variant="outline"
-                >
-                  Save Draft
-                </Button>
-                <Button
-                  onClick={handlePostToLinkedIn}
-                  disabled={isPosting}
-                  className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
-                >
-                  {isPosting ? (
-                    <div className="flex items-center space-x-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      <span>Publishing...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <ExternalLink className="h-4 w-4" />
-                      <span>Publish to LinkedIn</span>
-                    </div>
-                  )}
-                </Button>
-              </div>
+              <Button
+                onClick={handleCreateInterview}
+                disabled={isCreating}
+                className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+              >
+                {isCreating ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>Creating...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Create Interview</span>
+                  </div>
+                )}
+              </Button>
             </div>
           </div>
         </header>
 
         <div className="p-6">
           <div className="max-w-4xl mx-auto space-y-6">
-            {/* Job Preview */}
+            {/* Interview Summary */}
             <Card className="shadow-lg border-0">
               <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-2xl mb-2">{generatedJob?.title}</CardTitle>
-                    <div className="flex items-center space-x-4 text-gray-600 mb-4">
-                      <div className="flex items-center space-x-1">
-                        <Building className="h-4 w-4" />
-                        <span>{generatedJob?.company}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <MapPin className="h-4 w-4" />
-                        <span>{generatedJob?.location}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Clock className="h-4 w-4" />
-                        <span>{generatedJob?.type}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <DollarSign className="h-4 w-4" />
-                        <span>{generatedJob?.salary}</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {generatedJob?.skills?.map((skill: string) => (
-                        <Badge key={skill} variant="secondary">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <CardTitle>Interview Summary</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="prose max-w-none">
-                  <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                    {generatedJob?.description}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <div className="text-sm text-gray-600">Candidate</div>
+                    <div className="font-semibold">{interviewData.candidateName}</div>
+                    <div className="text-sm text-gray-500">{interviewData.jobTitle}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-600">Date & Time</div>
+                    <div className="font-semibold">{interviewData.scheduledDate}</div>
+                    <div className="text-sm text-gray-500">{interviewData.scheduledTime} ({interviewData.duration} min)</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-600">Type</div>
+                    <Badge className="capitalize">
+                      {interviewData.interviewType === 'ai' ? 'AI Voice Interview' : interviewData.interviewType.replace('-', ' ')}
+                    </Badge>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Screening Link */}
+            {/* Questions */}
             <Card className="shadow-lg border-0">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <Zap className="h-5 w-5 text-purple-600" />
-                  <span>AI Screening Link</span>
+                  {interviewData.interviewType === 'ai' ? (
+                    <Bot className="h-5 w-5 text-purple-600" />
+                  ) : (
+                    <Mic className="h-5 w-5 text-blue-600" />
+                  )}
+                  <span>Interview Questions</span>
                 </CardTitle>
                 <CardDescription>
-                  Candidates will use this link to apply and complete AI screening
+                  {interviewData.interviewType === 'ai' 
+                    ? 'AI will use these guidelines to conduct an adaptive interview'
+                    : 'Questions for the interviewer to ask during the session'
+                  }
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
-                  <Input
-                    value={screeningLink}
-                    readOnly
-                    className="bg-white"
-                  />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => copyToClipboard(screeningLink)}
-                  >
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                </div>
+              <CardContent className="space-y-4">
+                {interviewData.questions.map((question, index) => (
+                  <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-sm font-semibold text-blue-600 mt-1">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-gray-800">{question}</p>
+                    </div>
+                    {interviewData.interviewType !== 'ai' && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeQuestion(index)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+
+                {interviewData.interviewType !== 'ai' && (
+                  <div className="flex space-x-2">
+                    <Input
+                      placeholder="Add a custom question..."
+                      value={newQuestion}
+                      onChange={(e) => setNewQuestion(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && addQuestion()}
+                    />
+                    <Button onClick={addQuestion} variant="outline">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -484,16 +587,20 @@ export default function CreateJobPage() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Job Published!</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Interview Scheduled!</h1>
             <p className="text-gray-600 mb-6">
-              Your job has been successfully posted to LinkedIn and is now live for candidates to apply.
+              The interview has been scheduled successfully. 
+              {interviewData.interviewType === 'ai' 
+                ? ' The AI interviewer will conduct the session automatically.'
+                : ' Calendar invites will be sent to all participants.'
+              }
             </p>
             <div className="space-y-3">
               <Button onClick={handleBackToDashboard} className="w-full">
                 Back to Dashboard
               </Button>
               <Button variant="outline" className="w-full">
-                View Job Analytics
+                View All Interviews
               </Button>
             </div>
           </CardContent>
