@@ -1,10 +1,10 @@
 "use client"
 
-import { SignUp } from '@clerk/nextjs'
+import { SignIn } from '@clerk/nextjs'
 import Link from 'next/link'
 import { Brain, User } from 'lucide-react'
 
-export default function CandidateSignUpPage() {
+export default function CandidateSignInPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -17,13 +17,13 @@ export default function CandidateSignUpPage() {
           </Link>
           <div className="flex items-center justify-center space-x-2 mb-4">
             <User className="h-6 w-6 text-green-600" />
-            <h1 className="text-3xl font-bold text-gray-900">Join as Candidate</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Candidate Portal</h1>
           </div>
-          <p className="text-gray-600">Find your dream job with AI assistance</p>
+          <p className="text-gray-600">Sign in to track your applications</p>
         </div>
 
         <div className="flex justify-center">
-          <SignUp 
+          <SignIn 
             appearance={{
               elements: {
                 formButtonPrimary: 
@@ -36,16 +36,26 @@ export default function CandidateSignUpPage() {
                 footerActionLink: "text-green-600 hover:text-green-500"
               }
             }}
-            redirectUrl="/candidate/dashboard"
-            signInUrl="/signin-candidate"
+            redirectUrl="/candidate/profile"
+            signUpUrl="/candidate/signup"
           />
         </div>
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500 mb-4">
-            Are you hiring?{' '}
-            <Link href="/signup-recruiter" className="text-green-600 hover:text-green-500 font-medium">
-              Sign up as recruiter
+            Are you a recruiter?{' '}
+            <Link href="/recruiter/signin" className="text-green-600 hover:text-green-500 font-medium">
+              Sign in here
+            </Link>
+          </p>
+          <p className="text-xs text-gray-500">
+            By signing in, you agree to our{' '}
+            <Link href="/terms" className="text-green-600 hover:text-green-500">
+              Terms of Service
+            </Link>{' '}
+            and{' '}
+            <Link href="/privacy" className="text-green-600 hover:text-green-500">
+              Privacy Policy
             </Link>
           </p>
         </div>

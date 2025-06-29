@@ -36,15 +36,15 @@ export default function CandidateSignUpPage() {
                 footerActionLink: "text-green-600 hover:text-green-500"
               }
             }}
-            redirectUrl="/candidate/dashboard"
-            signInUrl="/signin-candidate"
+            redirectUrl="/candidate/profile"
+            signInUrl="/candidate/signin"
           />
         </div>
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500 mb-4">
             Are you hiring?{' '}
-            <Link href="/signup-recruiter" className="text-green-600 hover:text-green-500 font-medium">
+            <Link href="/recruiter/signup" className="text-green-600 hover:text-green-500 font-medium">
               Sign up as recruiter
             </Link>
           </p>

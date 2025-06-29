@@ -2,9 +2,9 @@
 
 import { SignUp } from '@clerk/nextjs'
 import Link from 'next/link'
-import { Brain } from 'lucide-react'
+import { Brain, Users } from 'lucide-react'
 
-export default function RegisterPage() {
+export default function RecruiterSignUpPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -15,8 +15,11 @@ export default function RegisterPage() {
               RecruitAI
             </span>
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
-          <p className="text-gray-600">Join thousands of companies using RecruitAI</p>
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Users className="h-6 w-6 text-blue-600" />
+            <h1 className="text-3xl font-bold text-gray-900">Join as Recruiter</h1>
+          </div>
+          <p className="text-gray-600">Start hiring with AI-powered recruitment</p>
         </div>
 
         <div className="flex justify-center">
@@ -34,7 +37,17 @@ export default function RegisterPage() {
               }
             }}
             redirectUrl="/dashboard"
+            signInUrl="/recruiter/signin"
           />
+        </div>
+
+        <div className="mt-8 text-center">
+          <p className="text-sm text-gray-500 mb-4">
+            Looking for a job?{' '}
+            <Link href="/candidate/signup" className="text-blue-600 hover:text-blue-500 font-medium">
+              Sign up as candidate
+            </Link>
+          </p>
         </div>
       </div>
     </div>

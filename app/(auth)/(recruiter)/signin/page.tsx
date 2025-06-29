@@ -37,14 +37,14 @@ export default function RecruiterSignInPage() {
               }
             }}
             redirectUrl="/dashboard"
-            signUpUrl="/signup-recruiter"
+            signUpUrl="/recruiter/signup"
           />
         </div>
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500 mb-4">
             Are you a job candidate?{' '}
-            <Link href="/signin-candidate" className="text-blue-600 hover:text-blue-500 font-medium">
+            <Link href="/candidate/signin" className="text-blue-600 hover:text-blue-500 font-medium">
               Sign in here
             </Link>
           </p>

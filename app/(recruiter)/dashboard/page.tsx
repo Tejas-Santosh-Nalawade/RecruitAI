@@ -58,7 +58,7 @@ export default function RecruiterDashboard() {
   }
 
   if (!user) {
-    router.push('/signin-recruiter')
+    router.push('/recruiter/signin')
     return null
   }
 
