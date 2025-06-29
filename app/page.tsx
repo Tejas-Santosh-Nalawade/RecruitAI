@@ -47,14 +47,23 @@ export default function Home() {
           </nav>
           <div className="flex items-center space-x-3">
             <SignedOut>
-              <SignInButton mode="modal">
-                <Button variant="ghost">Sign In</Button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                  Get Started
-                </Button>
-              </SignUpButton>
+              <div className="flex items-center space-x-2">
+                <Link href="/signin-recruiter">
+                  <Button variant="ghost" size="sm">
+                    Recruiter Sign In
+                  </Button>
+                </Link>
+                <Link href="/signin-candidate">
+                  <Button variant="ghost" size="sm">
+                    Candidate Sign In
+                  </Button>
+                </Link>
+                <Link href="/signup-recruiter">
+                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
             </SignedOut>
             <SignedIn>
               <Link href="/dashboard">
@@ -92,12 +101,20 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <SignedOut>
-              <SignUpButton mode="modal">
-                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg">
-                  Start Recruiting
-                  <Zap className="ml-2 h-5 w-5" />
-                </Button>
-              </SignUpButton>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/signup-recruiter">
+                  <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg">
+                    Start Recruiting
+                    <Zap className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link href="/signup-candidate">
+                  <Button size="lg" variant="outline" className="px-8 py-3 text-lg border-green-600 text-green-600 hover:bg-green-50">
+                    Find Jobs
+                    <Users className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
             </SignedOut>
             <SignedIn>
               <Link href="/dashboard">
@@ -315,11 +332,11 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <SignedOut>
-              <SignUpButton mode="modal">
+              <Link href="/signup-recruiter">
                 <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg">
                   Start Free Trial
                 </Button>
-              </SignUpButton>
+              </Link>
             </SignedOut>
             <SignedIn>
               <Link href="/dashboard">

@@ -41,6 +41,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import Link from 'next/link'
 
 export default function RecruiterDashboard() {
   const { user, isLoaded } = useUser()
@@ -57,7 +58,7 @@ export default function RecruiterDashboard() {
   }
 
   if (!user) {
-    router.push('/login')
+    router.push('/signin-recruiter')
     return null
   }
 
@@ -171,8 +172,11 @@ export default function RecruiterDashboard() {
   ]
 
   const handleCreateJob = () => {
-    // TODO: Navigate to job creation page
-    console.log('Create new job')
+    router.push('/jobs/create')
+  }
+
+  const handleCreateInterview = () => {
+    router.push('/interviews/create')
   }
 
   const handleJobAction = (action: string, jobId: string) => {
@@ -254,7 +258,11 @@ export default function RecruiterDashboard() {
             <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Button variant="outline" className="h-auto p-4 flex flex-col items-center space-y-2 hover:bg-blue-50 hover:border-blue-200">
+            <Button 
+              variant="outline" 
+              className="h-auto p-4 flex flex-col items-center space-y-2 hover:bg-blue-50 hover:border-blue-200"
+              onClick={handleCreateJob}
+            >
               <Plus className="h-6 w-6 text-blue-600" />
               <span className="text-sm font-medium">Create Job</span>
             </Button>
@@ -262,7 +270,11 @@ export default function RecruiterDashboard() {
               <Users className="h-6 w-6 text-purple-600" />
               <span className="text-sm font-medium">View Candidates</span>
             </Button>
-            <Button variant="outline" className="h-auto p-4 flex flex-col items-center space-y-2 hover:bg-green-50 hover:border-green-200">
+            <Button 
+              variant="outline" 
+              className="h-auto p-4 flex flex-col items-center space-y-2 hover:bg-green-50 hover:border-green-200"
+              onClick={handleCreateInterview}
+            >
               <Calendar className="h-6 w-6 text-green-600" />
               <span className="text-sm font-medium">Schedule Interview</span>
             </Button>
