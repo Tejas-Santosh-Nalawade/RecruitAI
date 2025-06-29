@@ -143,9 +143,8 @@ async function sendInterviewNotifications(interview: any) {
     body: `Dear ${interview.candidateName},\n\nYour interview has been scheduled for ${interview.scheduledAt}.\n\nMeeting Link: ${interview.meetingLink}\n\nBest regards,\nRecruitAI Team`
   }
 
-  let interviewerEmail = null;
   if (interview.interviewType !== 'ai') {
-    interviewerEmail = {
+    const interviewerEmail = {
       to: interview.interviewerEmail,
       subject: `Interview Scheduled: ${interview.candidateName}`,
       body: `Interview scheduled with ${interview.candidateName} for ${interview.jobTitle} position.\n\nTime: ${interview.scheduledAt}\nMeeting Link: ${interview.meetingLink}\n\nQuestions and notes are available in the RecruitAI dashboard.`
@@ -155,5 +154,5 @@ async function sendInterviewNotifications(interview: any) {
   }
 
   // TODO: Send actual emails
-  return { candidateEmail, interviewerEmail }
+  return { candidateEmail }
 }

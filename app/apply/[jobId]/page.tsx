@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -20,14 +20,14 @@ import {
 
 export default function JobApplicationPage() {
   const params = useParams()
-  const jobId = params.jobId
+  const jobId = params.jobId as string
   
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    resume: null
+    resume: null as File | null
   })
 
   // Mock job data
@@ -48,14 +48,14 @@ export default function JobApplicationPage() {
     skills: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Jest']
   }
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       setFormData(prev => ({ ...prev, resume: file }))
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (step < 3) {
       setStep(step + 1)
