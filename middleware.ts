@@ -32,7 +32,7 @@ const isCandidateRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+  const { userId, sessionClaims } = await auth();
   
   // Allow public routes
   if (isPublicRoute(req)) {
@@ -50,8 +50,23 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.redirect(new URL('/', req.url));
   }
 
-  // For authenticated users, let the page components handle role-based redirects
-  // This prevents middleware redirect loops while role is being set
+  // Get user role from metadata
+  const userRole = (sessionClaims?.unsafeMetadata as { role?: string })?.role || 
+                   (sessionClaims?.publicMetadata as { role?: string })?.role;
+
+  // Role-based access control
+  if (userRole) {
+    // Redirect candidates trying to access recruiter routes
+    if (isRecruiterRoute(req) && userRole === 'candidate') {
+      return NextResponse.redirect(new URL('/candidate/dashboard', req.url));
+    }
+    
+    // Redirect recruiters trying to access candidate routes
+    if (isCandidateRoute(req) && userRole === 'recruiter') {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+  }
+
   return NextResponse.next();
 });
 

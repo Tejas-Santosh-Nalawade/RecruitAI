@@ -3,8 +3,32 @@
 import { SignUp } from '@clerk/nextjs'
 import Link from 'next/link'
 import { Brain, Users } from 'lucide-react'
+import { useUser } from '@clerk/nextjs'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function RecruiterSignUpPage() {
+  const { user, isLoaded } = useUser()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      // Set the role in user metadata after sign up
+      user.update({
+        unsafeMetadata: {
+          role: 'recruiter'
+        }
+      }).then(() => {
+        // Redirect to dashboard after role is set
+        router.push('/dashboard')
+      }).catch((error) => {
+        console.error('Error setting user role:', error)
+        // Still redirect even if metadata update fails
+        router.push('/dashboard')
+      })
+    }
+  }, [isLoaded, user, router])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -36,11 +60,8 @@ export default function RecruiterSignUpPage() {
                 footerActionLink: "text-blue-600 hover:text-blue-500"
               }
             }}
-            redirectUrl="/dashboard"
             signInUrl="/recruiter/signin"
-            unsafeMetadata={{
-              role: "recruiter"
-            }}
+            forceRedirectUrl="/dashboard"
           />
         </div>
 

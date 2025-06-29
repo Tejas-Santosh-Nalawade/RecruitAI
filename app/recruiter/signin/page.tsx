@@ -3,8 +3,29 @@
 import { SignIn } from '@clerk/nextjs'
 import Link from 'next/link'
 import { Brain, Users } from 'lucide-react'
+import { useUser } from '@clerk/nextjs'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function RecruiterSignInPage() {
+  const { user, isLoaded } = useUser()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      // Set role to recruiter and redirect
+      user.update({
+        unsafeMetadata: {
+          role: 'recruiter'
+        }
+      }).then(() => {
+        router.push('/dashboard')
+      }).catch(() => {
+        router.push('/dashboard')
+      })
+    }
+  }, [isLoaded, user, router])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -36,8 +57,8 @@ export default function RecruiterSignInPage() {
                 footerActionLink: "text-blue-600 hover:text-blue-500"
               }
             }}
-            redirectUrl="/dashboard"
             signUpUrl="/recruiter/signup"
+            forceRedirectUrl="/dashboard"
           />
         </div>
 

@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useUser, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
@@ -15,12 +15,14 @@ export default function AuthButtons({ showHero, showCTA }: AuthButtonsProps) {
   const { user } = useUser()
 
   const getDashboardLink = () => {
-    const userRole =
-      user?.unsafeMetadata?.role ||
-      user?.publicMetadata?.role ||
-      user?.organizationMemberships?.[0]?.role
-
-    return userRole === 'candidate' ? '/candidate/dashboard' : '/dashboard'
+    // Check multiple possible locations for role
+    const userRole = user?.unsafeMetadata?.role || 
+                     user?.publicMetadata?.role
+    
+    if (userRole === 'candidate') {
+      return '/candidate/dashboard'
+    }
+    return '/dashboard'
   }
 
   return (
@@ -30,20 +32,13 @@ export default function AuthButtons({ showHero, showCTA }: AuthButtonsProps) {
           {showHero ? (
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/recruiter/signup">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg"
-                >
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg">
                   Start Recruiting
                   <Zap className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link href="/candidate/signup">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="px-8 py-3 text-lg border-green-600 text-green-600 hover:bg-green-50"
-                >
+                <Button size="lg" variant="outline" className="px-8 py-3 text-lg border-green-600 text-green-600 hover:bg-green-50">
                   Find Jobs
                   <Users className="ml-2 h-5 w-5" />
                 </Button>
@@ -51,10 +46,7 @@ export default function AuthButtons({ showHero, showCTA }: AuthButtonsProps) {
             </div>
           ) : showCTA ? (
             <Link href="/recruiter/signup">
-              <Button
-                size="lg"
-                className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg"
-              >
+              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg">
                 Start Free Trial
               </Button>
             </Link>
@@ -71,21 +63,17 @@ export default function AuthButtons({ showHero, showCTA }: AuthButtonsProps) {
                 </Button>
               </Link>
               <Link href="/recruiter/signup">
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                   Get Started
                 </Button>
               </Link>
             </div>
           )}
         </SignedOut>
-
         <SignedIn>
           {showHero || showCTA ? (
             <Link href={getDashboardLink()}>
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg"
-              >
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg">
                 Go to Dashboard
                 <Zap className="ml-2 h-5 w-5" />
               </Button>
@@ -97,11 +85,11 @@ export default function AuthButtons({ showHero, showCTA }: AuthButtonsProps) {
                   Dashboard
                 </Button>
               </Link>
-              <UserButton
+              <UserButton 
                 appearance={{
                   elements: {
-                    avatarBox: 'w-8 h-8',
-                  },
+                    avatarBox: "w-8 h-8"
+                  }
                 }}
                 afterSignOutUrl="/"
               />
