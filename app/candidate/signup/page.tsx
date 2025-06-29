@@ -36,8 +36,11 @@ export default function CandidateSignUpPage() {
                 footerActionLink: "text-green-600 hover:text-green-500"
               }
             }}
-            redirectUrl="/candidate/profile"
+            redirectUrl="/candidate/dashboard"
             signInUrl="/candidate/signin"
+            unsafeMetadata={{
+              role: "candidate"
+            }}
           />
         </div>
 

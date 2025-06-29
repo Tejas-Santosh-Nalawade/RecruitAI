@@ -19,7 +19,7 @@ export default function CandidateSignInPage() {
             <User className="h-6 w-6 text-green-600" />
             <h1 className="text-3xl font-bold text-gray-900">Candidate Portal</h1>
           </div>
-          <p className="text-gray-600">Sign in to track your applications</p>
+          <p className="text-gray-600">Sign in to find jobs and complete AI screenings</p>
         </div>
 
         <div className="flex justify-center">
@@ -36,7 +36,7 @@ export default function CandidateSignInPage() {
                 footerActionLink: "text-green-600 hover:text-green-500"
               }
             }}
-            redirectUrl="/candidate/profile"
+            redirectUrl="/candidate/dashboard"
             signUpUrl="/candidate/signup"
           />
         </div>

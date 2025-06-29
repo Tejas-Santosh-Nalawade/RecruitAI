@@ -38,6 +38,9 @@ export default function RecruiterSignUpPage() {
             }}
             redirectUrl="/dashboard"
             signInUrl="/recruiter/signin"
+            unsafeMetadata={{
+              role: "recruiter"
+            }}
           />
         </div>
 

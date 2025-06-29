@@ -19,7 +19,7 @@ export default function RecruiterSignInPage() {
             <Users className="h-6 w-6 text-blue-600" />
             <h1 className="text-3xl font-bold text-gray-900">Recruiter Portal</h1>
           </div>
-          <p className="text-gray-600">Sign in to manage your recruitment process</p>
+          <p className="text-gray-600">Sign in to create jobs and manage recruitment</p>
         </div>
 
         <div className="flex justify-center">
