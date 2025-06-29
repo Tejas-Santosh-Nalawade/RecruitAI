@@ -33,6 +33,7 @@ export default function LoginPage() {
                 footerActionLink: "text-blue-600 hover:text-blue-500"
               }
             }}
+            redirectUrl="/dashboard"
           />
         </div>
 

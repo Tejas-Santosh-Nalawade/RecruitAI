@@ -33,6 +33,7 @@ export default function RegisterPage() {
                 footerActionLink: "text-blue-600 hover:text-blue-500"
               }
             }}
+            redirectUrl="/dashboard"
           />
         </div>
       </div>

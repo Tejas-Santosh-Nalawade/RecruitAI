@@ -14,6 +14,13 @@ import {
   Clock,
   CheckCircle
 } from 'lucide-react'
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 
 export default function Home() {
   return (
@@ -39,12 +46,31 @@ export default function Home() {
             </Link>
           </nav>
           <div className="flex items-center space-x-3">
-            <Link href="/login">
-              <Button variant="ghost">Sign In</Button>
-            </Link>
-            <Link href="/register">
-              <Button>Get Started</Button>
-            </Link>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <Button variant="ghost">Sign In</Button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                  Get Started
+                </Button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button variant="outline" className="mr-2">
+                  Dashboard
+                </Button>
+              </Link>
+              <UserButton 
+                appearance={{
+                  elements: {
+                    avatarBox: "w-8 h-8"
+                  }
+                }}
+                afterSignOutUrl="/"
+              />
+            </SignedIn>
           </div>
         </div>
       </header>
@@ -65,12 +91,22 @@ export default function Home() {
             From job posting to onboarding, automate your entire recruitment workflow.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link href="/register?role=recruiter">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg">
-                Start Recruiting
-                <Zap className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <SignedOut>
+              <SignUpButton mode="modal">
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg">
+                  Start Recruiting
+                  <Zap className="ml-2 h-5 w-5" />
+                </Button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg">
+                  Go to Dashboard
+                  <Zap className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </SignedIn>
             <Link href="/demo">
               <Button size="lg" variant="outline" className="px-8 py-3 text-lg">
                 Watch Demo
@@ -278,11 +314,20 @@ export default function Home() {
             Join thousands of companies already using RecruitAI to find the best talent faster and more efficiently.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register?role=recruiter">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg">
-                Start Free Trial
-              </Button>
-            </Link>
+            <SignedOut>
+              <SignUpButton mode="modal">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg">
+                  Start Free Trial
+                </Button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg">
+                  Go to Dashboard
+                </Button>
+              </Link>
+            </SignedIn>
             <Link href="/contact">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 text-lg">
                 Contact Sales
