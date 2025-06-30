@@ -64,10 +64,10 @@ And the results? _Game-changing._
 
 ## 🖼️ Screenshots
 
-> All screenshots are placed inside the `/public` folder. They auto-render with Next.js static optimization.
+
 
 ### 🧠 Landing Page
-![Landing Page](./code_cubicle1.jpeg)
+![Landing Page](../public/code_cubicle1.jpeg)
 
 ### 📆 AI Voice Screening
 ![AI Screening](./code_cubicle2.jpeg)
