@@ -1,37 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🤖 RecruitAI - AI Powered Recruitment System
 
-## Getting Started
+> **Streamline Recruitment with AI – From Screening to Signing.**
 
-First, run the development server:
+Welcome to the frontend of **Code-Cubicle 4.0**, a next-gen AI-powered recruitment assistant designed to automate and elevate every stage of the hiring pipeline — from **resume screening** to **offer clarification**.
+
+Built with [Next.js 14+](https://nextjs.org), TypeScript, and the App Router, this project delivers a fast, responsive, and scalable user experience.
+
+---
+
+## 🧩 Problem Statement
+
+Recruitment today is time-consuming and prone to delays. Code-Cubicle 4.0 addresses these key bottlenecks:
+
+- ❌ Manual **candidate screening**
+- ❌ Back-and-forth **interview coordination**
+- ❌ Confusing **offer clarification** and benefit FAQs
+
+### ✅ Our AI-Powered Solution:
+
+1. ### 🧠 **Resume Reader**
+   - Candidates answer screening questions via voice or text.
+   - NLP engine ranks candidates automatically.
+   - Recruiters get a short-list instantly.
+
+2. ### ⏱️ **Interview Scheduler**
+   - Real-time negotiation with candidates.
+   - Handles time zones, conflicts, and updates Google/Outlook calendars.
+   - From shortlist to scheduled in under 60 seconds.
+
+3. ### 📝 **Offer Clarifier**
+   - New hires ask benefits & comp questions.
+   - AI chatbot clarifies policies and perks.
+   - Captures intent and generates e-signed offer letters.
+
+---
+
+## 🔥 Screenshots
+
+> Note: Replace these image links with your actual `/public/` image paths or hosted URLs.
+
+### 📄 Resume Reader AI Interface
+
+![Resume Reader](./public/screenshots/resume-reader.png)
+
+### 📅 Smart Interview Scheduler
+
+![Interview Scheduler](./public/screenshots/interview-scheduler.png)
+
+### 📜 Offer Clarification Chat with E-Sign
+
+![Offer Clarifier](./public/screenshots/offer-clarifier.png)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone & Install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# Code-Cubicle-4.0-Frontend
+git clone https://github.com/<your-org>/Code-Cubicle-4.0-Frontend.git
+cd Code-Cubicle-4.0-Frontend
+npm install
