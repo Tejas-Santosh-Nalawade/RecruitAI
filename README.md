@@ -1,63 +1,108 @@
-# 🤖 RecruitAI - AI Powered Recruitment System
+# 🚀 𝐑𝐞𝐯𝐨𝐥𝐮𝐭𝐢𝐨𝐧𝐢𝐳𝐢𝐧𝐠 𝐇𝐢𝐫𝐢𝐧𝐠 𝐰𝐢𝐭𝐡 𝐀𝐈 – 𝐂𝐨𝐝𝐞 𝐂𝐮𝐛𝐢𝐜𝐥𝐞 𝟒.𝟎 💼🤖
 
-> **Streamline Recruitment with AI – From Screening to Signing.**
+We didn’t just build a project —  
+**We built the future of recruitment.**
 
-Welcome to the frontend of **Code-Cubicle 4.0**, a next-gen AI-powered recruitment assistant designed to automate and elevate every stage of the hiring pipeline — from **resume screening** to **offer clarification**.
-
-Built with [Next.js 14+](https://nextjs.org), TypeScript, and the App Router, this project delivers a fast, responsive, and scalable user experience.
-
----
-
-## 🧩 Problem Statement
-
-Recruitment today is time-consuming and prone to delays. Code-Cubicle 4.0 addresses these key bottlenecks:
-
-- ❌ Manual **candidate screening**
-- ❌ Back-and-forth **interview coordination**
-- ❌ Confusing **offer clarification** and benefit FAQs
-
-### ✅ Our AI-Powered Solution:
-
-1. ### 🧠 **Resume Reader**
-   - Candidates answer screening questions via voice or text.
-   - NLP engine ranks candidates automatically.
-   - Recruiters get a short-list instantly.
-
-2. ### ⏱️ **Interview Scheduler**
-   - Real-time negotiation with candidates.
-   - Handles time zones, conflicts, and updates Google/Outlook calendars.
-   - From shortlist to scheduled in under 60 seconds.
-
-3. ### 📝 **Offer Clarifier**
-   - New hires ask benefits & comp questions.
-   - AI chatbot clarifies policies and perks.
-   - Captures intent and generates e-signed offer letters.
+Presenting: **RecruitAI** – your AI-powered hiring co-pilot.  
+✨ _“From JD creation to final offer – automate it all with intelligence.”_
 
 ---
 
-## 🔥 Screenshots
+## 👨‍💻 Built by Team BruteForce
 
-> Note: Replace these image links with your actual `/public/` image paths or hosted URLs.
+Crafted with passion & purpose by:
 
-### 📄 Resume Reader AI Interface
+- **Tejas Nalawade**  
+- **Pravin Rathod**  
+- **Prasad Kandekar**
 
-![Resume Reader](./public/screenshots/resume-reader.png)
-
-### 📅 Smart Interview Scheduler
-
-![Interview Scheduler](./public/screenshots/interview-scheduler.png)
-
-### 📜 Offer Clarification Chat with E-Sign
-
-![Offer Clarifier](./public/screenshots/offer-clarifier.png)
+🔗 Linkedin Post: [Linkedin Post](https://www.linkedin.com/posts/tejas-nalawade_ai-recruitai-codecubicle4-activity-7345486839568338944-wAh_?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEQ2XtgBOaJPeJahy_7WdqhuDpzTJVu8zq0)
 
 ---
 
-## 🚀 Getting Started
+## 💥 Why RecruitAI?
 
-### 1. Clone & Install
+Hiring today is still stuck in the past:
+
+✖️ Endless resume screening  
+✖️ Back-and-forth scheduling  
+✖️ Candidate disengagement  
+
+**So we reimagined the process – with AI at its core.**  
+And the results? _Game-changing._
+
+---
+
+## 🎯 Key Features
+
+### 🧠 AI Resume Reader
+- Accepts candidate input via **voice** or **text**
+- **NLP-powered** ranking within seconds
+- **Smart shortlist** ready for recruiters
+
+### 📆 Interview Scheduler
+- Real-time **slot negotiation**
+- Auto-sync with **Google** & **Outlook**
+- Handles **timezone & conflict resolution**
+
+### 📋 Offer Clarifier + E-Sign
+- AI chatbot answers **benefits & compensation** queries
+- Auto-generates offer letters
+- Seamless **e-sign handoff**
+
+### 📄 AI Job Description Generator
+- Auto-generates tailored **JDs**
+- One-click **posting to LinkedIn**
+
+### ⚡ Bonus Capabilities
+- Voice AI Screening  
+- Smart Resume Parsing  
+- Candidate Ranking Engine  
+- End-to-End Onboarding Tracker  
+
+---
+
+## 🖼️ Screenshots
+
+> All screenshots are placed inside the `/public` folder. They auto-render with Next.js static optimization.
+
+### 🧠 Landing Page
+![Landing Page](./code_cubicle1.jpeg)
+
+### 📆 AI Voice Screening
+![AI Screening](./code_cubicle2.jpeg)
+
+### 📋Workflow
+![Work Flow](./code_cubicle3.jpeg)
+
+### 📄 Features
+![Features](./code_cubicle4.jpeg)
+
+### 📊 Dashboard Snapshot
+![Dashboard](./code_cubicle5.jpeg)
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer          | Tools/Frameworks                          |
+|----------------|--------------------------------------------|
+| Frontend       | **Next.js 14+**, **TypeScript**, **TailwindCSS** |
+| Backend        | **n8n (AI Agent Flows)**, **PostgreSQL** |
+| AI/Voice       | **OmniDimension (Voice AI)**              |
+| Deployment     | **Vercel**, **NeonDB** (Optional)         |
+
+---
+
+## 📁 Folder Structure
 
 ```bash
-git clone https://github.com/<your-org>/Code-Cubicle-4.0-Frontend.git
-cd Code-Cubicle-4.0-Frontend
-npm install
+/app
+  ├── layout.tsx           # Shared layout
+  ├── page.tsx             # Homepage
+  ├── modules/             # ResumeReader, Scheduler, Clarifier, JDGen
+/components                # Reusable UI components
+/public/
+  ├── code_cubicle1.jpeg   # Screenshot 1
+  ├── code_cubicle2.jpeg   # Screenshot 2
+  ├── ...
