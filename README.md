@@ -67,19 +67,19 @@ And the results? _Game-changing._
 
 
 ### 🧠 Landing Page
-![Landing Page](../public/code_cubicle1.jpeg)
+![Landing Page](public/code_cubicle1.jpeg)
 
 ### 📆 AI Voice Screening
-![AI Screening](./code_cubicle2.jpeg)
+![AI Screening](public/code_cubicle2.jpeg)
 
 ### 📋Workflow
-![Work Flow](./code_cubicle3.jpeg)
+![Work Flow](public/code_cubicle3.jpeg)
 
 ### 📄 Features
-![Features](./code_cubicle4.jpeg)
+![Features](public/code_cubicle4.jpeg)
 
 ### 📊 Dashboard Snapshot
-![Dashboard](./code_cubicle5.jpeg)
+![Dashboard](public/code_cubicle5.jpeg)
 
 ---
 
