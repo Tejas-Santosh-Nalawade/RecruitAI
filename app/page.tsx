@@ -9,7 +9,6 @@ import {
   Calendar, 
   FileText, 
   TrendingUp,
-  Zap,
   Shield,
   Clock,
   CheckCircle
