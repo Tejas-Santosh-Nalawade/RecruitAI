@@ -175,7 +175,7 @@ export default function CreateInterviewPage() {
           <header className="bg-white border-b">
             <div className="px-6 py-4">
               <div className="flex items-center space-x-4">
-                <Link href="/dashboard">
+                <Link href="/recruiter/dashboard">
                   <Button variant="ghost" size="sm">
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back to Dashboard
@@ -511,7 +511,7 @@ export default function CreateInterviewPage() {
                 The interview has been scheduled successfully. Calendar invites will be sent to all participants.
               </p>
               <div className="space-y-3">
-                <Link href="/dashboard">
+                <Link href="/recruiter/dashboard">
                   <Button className="w-full">
                     Back to Dashboard
                   </Button>

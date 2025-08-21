@@ -211,7 +211,7 @@ export default function CreateInterviewPage() {
   }
 
   const handleBackToDashboard = () => {
-    window.location.href = '/dashboard'
+    window.location.href = '/recruiter/dashboard'
   }
 
   if (step === 1) {

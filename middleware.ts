@@ -1,7 +1,8 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher([
+// Public routes - no auth required
+const publicRoutes = createRouteMatcher([
   '/',
   '/about',
   '/contact',
@@ -9,64 +10,35 @@ const isPublicRoute = createRouteMatcher([
   '/demo',
   '/terms',
   '/privacy',
-  '/apply/(.*)',
-  '/screening/(.*)',
-  '/recruiter/signin',
-  '/recruiter/signup', 
-  '/candidate/signin',
-  '/candidate/signup'
+  '/auth/signin',
+  '/auth/signup'
 ]);
 
-const isRecruiterRoute = createRouteMatcher([
+// Protected routes that require authentication
+const protectedRoutes = createRouteMatcher([
   '/dashboard',
-  '/jobs/(.*)',
-  '/candidates/(.*)',
-  '/interviews/(.*)',
-  '/analytics/(.*)'
-]);
-
-const isCandidateRoute = createRouteMatcher([
-  '/candidate/dashboard',
-  '/candidate/profile',
-  '/candidate/(.*)'
+  '/profile',
+  '/jobs',
+  '/candidates',
+  '/interviews'
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId, sessionClaims } = await auth();
+  const { userId } = await auth();
+  const { pathname } = req.nextUrl;
   
   // Allow public routes
-  if (isPublicRoute(req)) {
+  if (publicRoutes(req)) {
     return NextResponse.next();
   }
 
-  // Redirect unauthenticated users to appropriate sign-in
+  // Redirect unauthenticated users to sign-in
   if (!userId) {
-    if (isRecruiterRoute(req)) {
-      return NextResponse.redirect(new URL('/recruiter/signin', req.url));
-    }
-    if (isCandidateRoute(req)) {
-      return NextResponse.redirect(new URL('/candidate/signin', req.url));
-    }
-    return NextResponse.redirect(new URL('/', req.url));
+    return NextResponse.redirect(new URL('/auth/signin', req.url));
   }
 
-  // Get user role from metadata
-  const userRole = (sessionClaims?.unsafeMetadata as { role?: string })?.role || 
-                   (sessionClaims?.publicMetadata as { role?: string })?.role;
-
-  // Role-based access control
-  if (userRole) {
-    // Redirect candidates trying to access recruiter routes
-    if (isRecruiterRoute(req) && userRole === 'candidate') {
-      return NextResponse.redirect(new URL('/candidate/dashboard', req.url));
-    }
-    
-    // Redirect recruiters trying to access candidate routes
-    if (isCandidateRoute(req) && userRole === 'recruiter') {
-      return NextResponse.redirect(new URL('/dashboard', req.url));
-    }
-  }
-
+  // Allow all authenticated users to access protected routes
+  // Role checking will be handled in the components themselves
   return NextResponse.next();
 });
 
